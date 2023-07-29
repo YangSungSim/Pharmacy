@@ -7,6 +7,10 @@ spring:
       prod:
         - common
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
 ---
 spring:
   config:
@@ -64,4 +68,5 @@ pharmacy:
   recommendation:
     base:
       url: http://3.38.78.187/dir/
+
 
