@@ -1,5 +1,6 @@
 package com.example.pharmacy.pharmacy.service;
 
+import com.example.pharmacy.pharmacy.cache.PharmacyRedisTemplateService;
 import com.example.pharmacy.pharmacy.dto.PharmacyDto;
 import com.example.pharmacy.pharmacy.entity.Pharmacy;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,15 @@ public class PharmacySearchService {
 
     private final PharmacyRepositoryService pharmacyRepositoryService;
 
-    public List<PharmacyDto> searchPharmacyDtoList() {
-        // redis
+    private final PharmacyRedisTemplateService pharmacyRedisTemplateService;
 
-        // db
+    public List<PharmacyDto> searchPharmacyDtoList() {
+
+        // redis 에서 먼저 찾아보고 없으면
+        List<PharmacyDto> pharmacyDtoList = pharmacyRedisTemplateService.findAll();
+        if (!pharmacyDtoList.isEmpty()) return pharmacyDtoList;
+
+        // db 에서 찾아보기
         return pharmacyRepositoryService.findAll()
                 .stream()
                 .map(this::convertToPharmacyDto)  // 메서드 레퍼런스를 이용해서 더 간결하게 작성.
